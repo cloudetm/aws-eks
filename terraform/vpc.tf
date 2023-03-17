@@ -1,10 +1,14 @@
+data "aws_availability_zones" "available" {
+    state = "available"
+}
+
 module "vpc" {
     source = "terraform-aws-modules/vpc/aws"
     version = "2.78.0"
 
     name = "test-vpc"
     cidr = "10.0.0.0/16"
-    azs = [ "us-east-1a", "us-east-1b" ]
+    azs = slice(data.aws_availability_zones.available.names, 0, 2)
 
     public_subnets = [ "10.0.101.0/24", "10.0.102.0/24" ]
 
